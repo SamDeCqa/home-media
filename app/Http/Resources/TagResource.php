@@ -14,6 +14,10 @@ class TagResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->uuid,
+            'name' => $this->name,
+            'user' => $this->whenLoaded('user', fn() => new UserResource($this->user))
+        ];
     }
 }

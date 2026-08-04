@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\{Fillable, Hidden, ObservedBy};
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(['name', 'user_id', 'uuid'])]
 #[Hidden('id')]
@@ -22,5 +23,10 @@ class Tag extends Model
             fn($name) => ucwords($name),
             fn($name) => strtolower($name)
         );
+    } 
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

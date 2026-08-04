@@ -16,7 +16,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::all();
+        $tags = Tag::with('user')->get();
 
         return TagResource::collection($tags);
     }
@@ -32,9 +32,10 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tag $Tag)
+    public function show(Tag $tag)
     {
-        return new TagResource($Tag);
+        $tag->load('user');
+        return new TagResource($tag);
     }
 
     /**
