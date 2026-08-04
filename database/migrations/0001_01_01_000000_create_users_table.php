@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RolesEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('password');
             $table->boolean('is_verified')->default(false);
+            $table->string('role')->default(RolesEnum::GUEST->value);
             $table->string('profile_photo');
             $table->string('cover_photo');
             $table->uuid()->unique();
