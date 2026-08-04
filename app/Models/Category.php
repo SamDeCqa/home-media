@@ -22,6 +22,12 @@ class Category extends Model
     }
 
 
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
+
     public function user () : BelongsTo
     {
         return $this->belongsTo(User::class);

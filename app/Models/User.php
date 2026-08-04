@@ -49,6 +49,11 @@ class User extends Authenticatable
         );
     }
 
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function role () : HasOne
     {
         return $this->hasOne(Role::class);

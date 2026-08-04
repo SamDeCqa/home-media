@@ -31,10 +31,10 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Media $media)
+    public function show(Media $medium)
     {
-        $media->load(['category']);
-        return new MediaResource($media);
+        $medium->load(['category']);
+        return new MediaResource($medium);
     }
 
     /**

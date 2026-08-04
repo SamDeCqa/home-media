@@ -23,6 +23,11 @@ class Tag extends Model
             fn($name) => ucwords($name),
             fn($name) => strtolower($name)
         );
+    }
+    
+    public function getRouteKeyName()
+    {
+        return 'uuid';
     } 
 
     public function user() : BelongsTo
