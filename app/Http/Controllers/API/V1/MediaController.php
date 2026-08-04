@@ -33,6 +33,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
+        $media->load(['category']);
         return new MediaResource($media);
     }
 
