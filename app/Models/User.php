@@ -3,9 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Observers\UuidObserver;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['name', 'password', 'is_verified', 'profile_photo', 'cover_photo', 'uuid'])]
 #[Hidden(['id', 'password', 'remember_token'])]
+#[ObservedBy(UuidObserver::class)]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
