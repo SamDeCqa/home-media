@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Attributes\{Fillable, Hidden};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name'])]
+#[Fillable(['type'])]
 #[Hidden('id')]
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory;
 
-    public function name()  : Attribute
+    public function type()  : Attribute
     {
         return Attribute::make(
-            fn($name) => ucwords($name),
-            fn($name) => strtolower($name)
+            fn($type) => ucwords($type),
+            fn($type) => strtolower($type)
         );
     }
 

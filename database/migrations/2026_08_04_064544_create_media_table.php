@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('path');
             $table->string('content_type');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('is_favorite')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained();
             $table->unsignedBigInteger('byte_size');
-            $table->json('metadata');
+            $table->json('metadata')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

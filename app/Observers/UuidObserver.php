@@ -13,4 +13,11 @@ class UuidObserver
             $model->uuid = Str::uuid();
         }
     }
+    
+   /* public function saving (Model $model) {
+        if(empty($model->uuid)){
+            $model->uuid = Str::uuid();
+        }
+    }
+        */
 }

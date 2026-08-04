@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Media;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,15 @@ class MediaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
-        ];
+            'name' => fake()->words(rand(2,4), true),
+            'uuid' => fake()->uuid(),
+            'path' => fake()->filePath(),
+            'content_type' => 'image/png',
+            'description' => fake()->boolean(70) ? fake()->realText() : null,
+            'is_favorite' => fake()->boolean(30),
+            'user_id' => fake()->boolean(80) ? User::inRandomOrder()->value('id') : null,
+            'category_id' => fake()->boolean(73) ? Category::inRandomOrder()->value('id') : null,
+            'byte_size' => rand(589, 14896),
+            ];
     }
 }

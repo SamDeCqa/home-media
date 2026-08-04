@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_verified')->default(false);
             $table->string('role')->default(RolesEnum::GUEST->value);
-            $table->string('profile_photo');
-            $table->string('cover_photo');
+            $table->string('profile_photo')->nullable();
+            $table->string('cover_photo')->nullable();
             $table->uuid()->unique();
             $table->rememberToken();
             $table->timestamps();
