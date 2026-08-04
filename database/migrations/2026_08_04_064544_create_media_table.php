@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->unique();
+            $table->string('name');
+            $table->string('path');
+            $table->string('content_type');
+            $table->text('description');
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained();
+            $table->unsignedBigInteger('byte_size');
+            $table->json('metadata');
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->index(['name']);
+            $table->fullText('description');
         });
     }
 
