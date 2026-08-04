@@ -7,6 +7,8 @@ use Database\Factories\MediaFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,8 +25,8 @@ class Media extends Model
     public function description(): Attribute
     {
         return Attribute::make(
-            fn ($description) => ucfirst($description),
-            fn ($description) => ucfirst($description)
+            fn($description) => ucfirst($description),
+            fn($description) => ucfirst($description)
         );
     }
 
@@ -40,18 +42,25 @@ class Media extends Model
         return 'uuid';
     }
 
-    public function user () : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function category () : BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function tags () : BelongsToMany
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'media_tags');
+    }
+
+    //SCOPES
+    #[Scope]
+    public function favorites(Builder $query)
+    {
+        return $query->where('is_favorite', true);
     }
 }

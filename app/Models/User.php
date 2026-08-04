@@ -76,12 +76,7 @@ class User extends Authenticatable
 
     //SCOPES
     #[Scope]
-    public function favourites(Builder $query){
-        return $query->media()->where('is_favourite', true);
-    }
-
-    #[Scope]
-    public function verified(Builder $query, bool $condtition){
-        return $query->where('is_verified', $condtition);
+    public function verified(Builder $query, bool $condition){
+        return $query->where('is_verified', $condition);
     }
 }
