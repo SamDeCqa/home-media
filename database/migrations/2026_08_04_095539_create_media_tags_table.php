@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('media_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->uuid()->unique();
+            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('media_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-
-            $table->index(['name']);
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('media_tags');
     }
 };
