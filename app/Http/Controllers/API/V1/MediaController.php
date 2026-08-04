@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMediaRequest;
 use App\Http\Requests\UpdateMediaRequest;
+use App\Http\Resources\MediaResource;
 use App\Models\Media;
 
 class MediaController extends Controller
@@ -14,15 +15,9 @@ class MediaController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $media = Media::with(['category'])->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return MediaResource::collection($media);
     }
 
     /**
@@ -38,15 +33,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Media $media)
-    {
-        //
+        return new MediaResource($media);
     }
 
     /**
@@ -62,6 +49,11 @@ class MediaController extends Controller
      */
     public function destroy(Media $media)
     {
-        //
+        $media->delete();
+
+        return response()->json([
+            'status' => 'succes',
+            'message' => 'Media was deleted successfully'
+        ]);
     }
 }
