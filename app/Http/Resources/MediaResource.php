@@ -21,6 +21,7 @@ class MediaResource extends JsonResource
             'type' => $this->content_type,
             'info' => $this->description,
             'user_id(For Dbg)' => $this->user_id,
+            'is_private(For Dbg)' => $this->is_private,
             'user' => $this->whenLoaded('user', fn() => new UserResource($this->user)),
             'category' => $this->whenLoaded('category', fn() => new CategoryResource($this->category)),
             'tags' => $this->whenLoaded('tags', fn() => TagResource::collection($this->tags)),

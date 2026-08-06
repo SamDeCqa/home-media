@@ -16,82 +16,45 @@ class MediaController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Media::query()->with(['category', 'tags']) //???????????: JE NAWEZA PATA MEDIA ALIZOWEKA ADMIN ZIWE AVAILABLE PUBLICLY KWA KILA MEMBER
-        ->where(
-            fn($q) => $q->where(
-                    fn($inner) => $inner->where(
-                        'user_id',
-                        '=',
-                        null
-                        )
-                        ->orWhereRelation(
-                        'category',
-                        'user_id',
-                        '=',
-                        null
-                    )
-                        ->orWhereRelation(
-                            'tags',
-                            'user_id',
-                            '=',
-                            null
-                        )
-                )
-        )
-        ->orWhereNot(
-                fn($q) => $q->where(
-                    fn($inner) => $inner->where(
-                        'user_id',
-                        '!=',
-                        $request->user()->id 
-                        )
-                        ->orWhereRelation(
-                        'category',
-                        'user_id',
-                        '!=',
-                        $request->user()->id //HAKUNA KUCHUKUA MEDIA ZA CATEGORY AMBAYO USER HUSIKA HAJAITENGENEZA YEYE
-                    )
-                        ->orWhereRelation(
-                            'tags',
-                            'user_id',
-                            '!=',
-                            $request->user()->id //HAKUNA KUCHUKUA MEDIA ZENYE TAGS AMBAZO USER HUSIKA HAKUZITENGENEZA YEYE
-                        )
-                )
-            );
+        $userId = $request->user()->id;
 
+        // Scope check: Visible if public OR owned by current user
+        $isAccessible = fn($q) => $q->where('is_private', false)
+            ->orWhere('user_id', $userId);
+
+        $query = Media::query()
+            ->with([
+                'category' => fn($q) => $q->where($isAccessible),
+                'tags'     => fn($q) => $q->where($isAccessible),
+            ])
+            // 2. Ensure only accessible media is returned
+            ->where($isAccessible);
+
+        // Filter: Media created by current user
         $query->when(
-            $request->has('by_me'), //KUPATA MEDIA ZOTE ALIZOHIFADHI USER
-            fn($q) => $q->where('user_id', $request->user()->id)
-            /* fn($q) => $q->where(
-                fn($inner) => $inner->where('user_id', $request->user()->id)//MEDIA ZENYE HIYO USER ID
-                    ->orWhereRelation(
-                        'category',
-                        'user_id',
-                        '=',
-                        $request->user()->id//MEDIA AMBAYO SIO YA HUYO USER ILA YEYE AMEI-CATEGORISE KIVYAKE
-                    )
-            )*/
+            $request->boolean('by_me'),
+            fn($q) => $q->where('user_id', $userId)
         );
 
+        // Filter: By Category Name (Scoped to visible categories)
         $query->when(
             $request->filled('category'),
-            fn($inner) => $inner->whereRelation(
-                'category',
-                'name',
-                'ilike',
-                '%' . $request->category . '%' //MEDIA ILIYOPO CATEGORY FLANI
-            )
+            fn($q) => $q->whereHas('category', function ($inner) use ($request, $isAccessible) {
+                $inner->where($isAccessible)
+                    ->where('name', 'ilike', '%' . $request->category . '%');
+            })
         );
 
+        // Filter: Search in Media Name OR Tag Name (Scoped to visible tags)
         $query->when(
-            $request->filled('tags'),
-            fn($inner) => $inner->whereRelation(
-                'tags',
-                'name',
-                'ilike',
-                '%' . $request->tags . '%' //MEDIA ILIYOPEWA TAG FLANI
-            )
+            $request->filled('search'),
+            fn($q) => $q->where(function ($searchQuery) use ($request, $isAccessible) {
+                $searchQuery->where('name', 'ilike', '%' . $request->search . '%')
+                    ->orWhereHas('tags', function ($tagQuery) use ($request, $isAccessible) {
+                        $tagQuery->where($isAccessible)
+                            ->whereIn('name', 'ilike', '%' . $request->search . '%');
+                    });
+            })
         );
 
         $media = $query->cursorPaginate(70);
