@@ -28,7 +28,9 @@ class TagSeeder extends Seeder
             foreach ($tags as $tag) {
                 Tag::create([
                     'name' => $tag,
-                    'uuid' => fake()->uuid()
+                    'uuid' => fake()->uuid(),
+                    'user_id' => 1,
+                    'is_private' => false
                 ]);
             }
         }
