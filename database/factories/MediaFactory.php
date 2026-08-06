@@ -27,6 +27,7 @@ class MediaFactory extends Factory
             'description' => fake()->boolean(70) ? fake()->realText() : null,
             'is_favorite' => fake()->boolean(30),
             'user_id' => User::inRandomOrder()->value('id'),
+            'is_private' => fake()->boolean(20),
             'category_id' => fake()->boolean(73) ? Category::inRandomOrder()->value('id') : null,
             'byte_size' => rand(589, 14896),
             ];
