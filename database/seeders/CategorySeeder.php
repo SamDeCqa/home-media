@@ -21,17 +21,17 @@ class CategorySeeder extends Seeder
         foreach ($categories as $category) {
             Category::create([
                 'name' => $category,
-                'uuid' => fake()->uuid()
+                'uuid' => fake()->uuid(),
+                'user_id' => 1,
+                'is_private' => false
             ]);
         }
 
-        for ($i = 0; $i < 7; $i++) {//HIZI NI CATEGORY ZA KILA USER KIVYAKE VYAKE
+        for ($i = 0; $i < 7; $i++) { //HIZI NI CATEGORY ZA KILA USER KIVYAKE VYAKE
             foreach ($users as $user) {
                 $user->categories()->create([
                     'name' => fake()->randomElement($personalCategories),
-                    'uuid' => fake()->uuid(),
-                    'user_id' => 1,
-                    'is_private' => false
+                    'uuid' => fake()->uuid()
                 ]);
             }
         }
