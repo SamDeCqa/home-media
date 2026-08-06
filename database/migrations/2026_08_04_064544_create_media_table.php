@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('content_type');
             $table->text('description')->nullable();
             $table->boolean('is_favorite')->default(false);
-            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->boolean('is_private')->default(true);
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained();
             $table->unsignedBigInteger('byte_size');
             $table->json('metadata')->nullable();

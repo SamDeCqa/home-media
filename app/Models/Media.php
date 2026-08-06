@@ -34,6 +34,7 @@ class Media extends Model
     {
         return [
             'is_favorite' => 'boolean',
+            'is_private' => 'boolean',
         ];
     }
 
