@@ -29,7 +29,9 @@ class CategorySeeder extends Seeder
             foreach ($users as $user) {
                 $user->categories()->create([
                     'name' => fake()->randomElement($personalCategories),
-                    'uuid' => fake()->uuid()
+                    'uuid' => fake()->uuid(),
+                    'user_id' => 1,
+                    'is_private' => false
                 ]);
             }
         }

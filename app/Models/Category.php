@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\{Fillable, Hidden, ObservedBy};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
-#[Fillable(['name', 'user_id', 'uuid'])]
+#[Fillable(['name', 'user_id', 'uuid', 'is_private'])]
 #[Hidden('id')]
 #[ObservedBy(UuidObserver::class)]
 class Category extends Model
@@ -20,6 +20,14 @@ class Category extends Model
             fn($name) => strtolower($name)
         );
     }
+
+    protected function casts(): array
+    {
+        return [
+            'is_private' => 'boolean',
+        ];
+    }
+    
 
 
     public function getRouteKeyName()
