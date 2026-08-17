@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\RolesEnum;
 use App\Observers\UuidObserver;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -41,7 +42,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function name()  : Attribute
+    public function name(): Attribute
     {
         return Attribute::make(
             fn($name) => ucwords($name),
@@ -54,29 +55,38 @@ class User extends Authenticatable
         return 'uuid';
     }
 
-    public function role () : HasOne
-    {
-        return $this->hasOne(Role::class);
-    }
 
-    public function media () : HasMany
+    public function media(): HasMany
     {
         return $this->hasMany(Media::class);
     }
 
-    public function categories () : HasMany
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
     }
 
-    public function tags () : HasMany
+    public function tags(): HasMany
     {
         return $this->hasMany(Tag::class);
     }
 
     //SCOPES
     #[Scope]
-    public function verified(Builder $query, bool $condition){
+    public function verified(Builder $query, bool $condition)
+    {
         return $query->where('is_verified', $condition);
+    }
+
+    #[Scope]
+    public function isAdmin(): bool
+    {
+        return $this->role == RolesEnum::ADMIN->value;
+    }
+
+    #[Scope]
+    public function role()
+    {
+        return $this->role;
     }
 }
