@@ -39,7 +39,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        $tag->load(['user', 'media']);
+        $tag->load(['media']);
         return new TagResource($tag);
     }
 
