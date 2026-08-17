@@ -49,7 +49,11 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $data = $request->validated();
+        
+        $category->update($data);
+
+        return new CategoryResource($category);
     }
 
     /**
