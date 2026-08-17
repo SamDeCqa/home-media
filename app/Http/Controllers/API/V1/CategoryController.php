@@ -26,7 +26,13 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $user = $request->user();
+
+        $category = $user->categories()->create($data);//KWANINI HII MWISHO WA SIKU INARUDISHA IS_PRIVATE NULL KWENYE HII METHOD???
+
+        return new CategoryResource($category);
     }
 
     /**

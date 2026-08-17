@@ -29,7 +29,7 @@ class TagController extends Controller
         $data = $request->validated();
         $user = $request->user();
 
-        $tag = $user->tags()->create($data);
+        $tag = $user->tags()->create($data);//KWANINI HII MWISHO WA SIKU INARUDISHA IS_PRIVATE NULL KWENYE HII METHOD???
 
         return new TagResource($tag);
     }
