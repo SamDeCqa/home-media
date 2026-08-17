@@ -26,12 +26,16 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $data = $request->validated();
-
         $user = $request->user();
 
-        $category = $user->categories()->create($data);//KWANINI HII MWISHO WA SIKU INARUDISHA IS_PRIVATE NULL KWENYE HII METHOD???
+        if (!$user->isAdmin()) {
+            $request->request->remove('is_private');
+        }
 
+        $data = $request->validated();
+
+        $category = $user->categories()->create($data); //KWANINI HII MWISHO WA SIKU INARUDISHA IS_PRIVATE NULL KWENYE HII METHOD???
+        
         return new CategoryResource($category);
     }
 
@@ -49,6 +53,12 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+        $user = $request->user();
+
+        if (!$user->isAdmin()) {
+            $request->request->remove('is_private');
+        }
+
         $data = $request->validated();
 
         $category->update($data);
