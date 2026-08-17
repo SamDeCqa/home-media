@@ -26,7 +26,12 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $data = $request->validated();
+        $user = $request->user();
+
+        $tag = $user->tags()->create($data);
+
+        return new TagResource($tag);
     }
 
     /**
@@ -34,7 +39,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        $tag->load('user');
+        $tag->load(['user', 'media']);
         return new TagResource($tag);
     }
 
