@@ -20,7 +20,7 @@ class CategoryResource extends JsonResource
             'description' => $this->description,
             'user_id(For Dbg)' => $this->user_id,
             'is_private(For Dbg)' => $this->is_private,
-            'user' => $this->whenLoaded('user', fn() => new UserResource($this->user))
+            'media' => $this->whenLoaded('media', fn() => MediaResource::collection($this->media))
         ];
     }
 }
