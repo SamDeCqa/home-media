@@ -12,7 +12,7 @@ class UpdateTagRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,8 @@ class UpdateTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'  => 'nullable|string|min:2|max:20',
+            'is_private' => 'nullable|boolean'
         ];
     }
 }
