@@ -17,6 +17,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->uuid,
             'name' => $this->name,
+            'description' => $this->description,
             'user_id(For Dbg)' => $this->user_id,
             'is_private(For Dbg)' => $this->is_private,
             'user' => $this->whenLoaded('user', fn() => new UserResource($this->user))

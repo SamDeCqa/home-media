@@ -24,6 +24,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:20',
+            'description' => 'nullable|string|min:3|max:255',
             'is_private' => 'boolean|nullable'
         ];
     }

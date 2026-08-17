@@ -21,6 +21,7 @@ class CategorySeeder extends Seeder
         foreach ($categories as $category) {
             Category::create([
                 'name' => $category,
+                'description' => fake()->realText(),
                 'uuid' => fake()->uuid(),
                 'user_id' => 1,
                 'is_private' => false
@@ -31,6 +32,7 @@ class CategorySeeder extends Seeder
             foreach ($users as $user) {
                 $user->categories()->create([
                     'name' => fake()->randomElement($personalCategories),
+                    'description' => fake()->realText(),
                     'uuid' => fake()->uuid()
                 ]);
             }
