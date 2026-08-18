@@ -67,7 +67,12 @@ class MediaController extends Controller
      */
     public function store(StoreMediaRequest $request)
     {
-        //
+        //pokea media
+        //assign categories specified na user
+        //assign tags specified na user
+        //extract meta data ujue size yake
+        //kama size ni kubwa >10Mb send kwenye background queue
+        //rudisha media resource ya hiyo media stored
     }
 
     /**
