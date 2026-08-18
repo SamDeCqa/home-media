@@ -6,7 +6,7 @@ use App\Observers\UuidObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\{Fillable, Hidden, ObservedBy};
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 #[Fillable(['name', 'user_id', 'uuid', 'is_private', 'description'])]
 #[Hidden('id')]
@@ -49,8 +49,8 @@ class Category extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function media(): HasMany
+    public function media(): BelongsToMany
     {
-        return $this->hasMany(Media::class);
+        return $this->belongsToMany(Media::class, 'media_categories');
     }
 }

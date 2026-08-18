@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
-#[Fillable(['uuid', 'name', 'path', 'content_type', 'description', 'user_id', 'category_id', 'byte_size', 'metadata', 'is_favorite', 'is_private'])]
+#[Fillable(['uuid', 'name', 'path', 'content_type', 'description', 'user_id', 'byte_size', 'metadata', 'is_favorite', 'is_private'])]
 #[Hidden('id')]
 #[ObservedBy(UuidObserver::class)]
 class Media extends Model
@@ -48,9 +48,14 @@ class Media extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function category(): BelongsTo
+    public function category(): BelongsToMany
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        /**
+         * Media iweze kuwa katika categories nyingi mfano kama Ni Picha ya Graduu 
+         * ya mtu inaweza ikawepo kwenye album ya 'Julius' pia ikawepo kwenye album 
+         * ya 'graduations'
+         */
+        return $this->belongsToMany(Category::class, 'media_categories');
     }
 
     public function tags(): BelongsToMany

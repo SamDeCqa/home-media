@@ -23,7 +23,7 @@ class MediaResource extends JsonResource
             'user_id(For Dbg)' => $this->user_id,
             'is_private(For Dbg)' => $this->is_private,
             'user' => $this->whenLoaded('user', fn() => new UserResource($this->user)),
-            'category' => $this->whenLoaded('category', fn() => new CategoryResource($this->category)),
+            'category' => $this->whenLoaded('category', fn() => CategoryResource::collection($this->category)),
             'tags' => $this->whenLoaded('tags', fn() => TagResource::collection($this->tags)),
             'size_in_bytes' => $this->byte_size,
             'metadata' => $this->metadata,

@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
         CategorySeeder::class,
         TagSeeder::class,
         MediaSeeder::class,
-        MediaTagSeeder::class
+        MediaTagSeeder::class,
+        MediaCategorySeeder::class
        ]);
     }
 }
