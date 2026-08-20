@@ -47,6 +47,11 @@ return [
             'report' => false,
         ],
 
+        'server_local' => [
+            'driver' => 'local',
+            'root' => getenv('HOME') . '/Desktop/Home Server',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

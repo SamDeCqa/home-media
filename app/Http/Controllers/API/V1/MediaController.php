@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Enums\MediaType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMediaRequest;
 use App\Http\Requests\UpdateMediaRequest;
 use App\Http\Resources\MediaResource;
+use App\Jobs\ProcessMedia;
 use App\Models\Media;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 
 class MediaController extends Controller
 {
@@ -65,14 +71,67 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMediaRequest $request)
-    {
+    public function store(StoreMediaRequest $request, FileReceiver $receiver)
+    { //NAHITAJI name, content-type, descr, is_favorite, is_priv, byte_size, metadata
         //pokea media
+        $request->validated();
+        
+        $save = $receiver->receive();
+
+        if($save->isFinished()){
+            return $this->saveFile($save->getFile(), $request);
+        }
+
+        //KAMA BADO HAIJAMALIZA KU-SAVE
+        $handler = $save->handler();
+
+        Log::info($handler->getPercentageDone());
+
         //assign categories specified na user
         //assign tags specified na user
         //extract meta data ujue size yake
         //kama size ni kubwa >10Mb send kwenye background queue
         //rudisha media resource ya hiyo media stored
+    }
+ 
+
+    /**
+     * Saves the completed, merged file to permanent storage.
+    */
+    protected function saveFile(UploadedFile $file, Request $request): JsonResponse
+    {
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+        $fileName = str_replace('.'.$extension, '', $file->getClientOriginalName()); // remove extension
+        $fileName .= '_' . md5(time()) . '.' . $extension; // create unique name
+        
+        // Store file in app/public/media
+        $path = $file->storeAs('media', $fileName, 'server_local');
+
+        $user = $request->user();
+
+         $media =  $user->media()->create([
+            'name' => $file->getFilename(),
+            'path' => $path,
+            'content_type'=> $file->getMimeType(),
+            'description' => $request->description,
+            'byte_size' => $file->getSize(),
+            'metadata' => null,
+            'is_favorite' => $request->is_favorite ?? false,
+            'is_private' => $request->is_private ?? true
+        ]);
+
+        $preferences = ['description' => $request->description, 'is_private' => $request->is_private, 'is_favorite' => $request->is_favorite];
+        
+        dispatch(new ProcessMedia($media));
+        // Delete temporary chunk metadata once saved
+        unlink($file->getPathname());
+
+        return response()->json([
+            // 'path' => $path,
+            'name' => $fileName,
+            'mime_type' => $preferences,
+        ]);
     }
 
     /**
