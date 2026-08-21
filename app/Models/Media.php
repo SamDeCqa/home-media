@@ -14,7 +14,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
-#[Fillable(['uuid', 'name', 'path', 'content_type', 'description', 'user_id', 'byte_size', 'metadata', 'is_favorite', 'is_private'])]
+#[Fillable([
+    'uuid',
+    'name',
+    'path',
+    'content_type',
+    'description',
+    'disk',
+    'user_id',
+    'byte_size',
+    'metadata',
+    'is_favorite',
+    'is_private',
+    'thumbnail_path',
+    'processing_status'
+])]
 #[Hidden('id')]
 #[ObservedBy(UuidObserver::class)]
 class Media extends Model

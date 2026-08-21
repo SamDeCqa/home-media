@@ -113,6 +113,7 @@ class MediaController extends Controller
          $media =  $user->media()->create([
             'name' => $file->getFilename(),
             'path' => $path,
+            'disk' => 'server_local',
             'content_type'=> $file->getMimeType(),
             'description' => $request->description,
             'byte_size' => $file->getSize(),
@@ -123,7 +124,7 @@ class MediaController extends Controller
 
         $preferences = ['description' => $request->description, 'is_private' => $request->is_private, 'is_favorite' => $request->is_favorite];
         
-        dispatch(new ProcessMedia($media));
+        dispatch(new ProcessMedia($media->id));
         // Delete temporary chunk metadata once saved
         unlink($file->getPathname());
 

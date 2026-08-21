@@ -6,6 +6,7 @@ use App\Enums\MediaProcessingStatus;
 use App\Enums\MediaType;
 use App\Models\Media;
 use App\Models\User;
+use App\Services\ThumbnailGenerator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ private $user;*/
      * Create a new job instance.
      */
     public function __construct(
-        private Media $media
+        public int $mediaId
     ) {
         /*$this->file = $file;
         $this->user = $user;*/
@@ -31,9 +32,9 @@ private $user;*/
     /**
      * Execute the job.
      */
-    public function handle()
+    public function handle(ThumbnailGenerator $thumbnailGenerator)
     {
-
+        $media = Media::findOrFail($this->mediaId);
 
 
 
@@ -44,9 +45,14 @@ private $user;*/
             default => 'docs/',
         };*/
 
+        $thumbnail = $thumbnailGenerator->generate($media);
 
-    $this->media->update(['processing_status' => MediaProcessingStatus::READY->value]);
-    info($this->media);
+        $media->update([
+            'thumbnail_path' => $thumbnail,
+            'processing_status' => MediaProcessingStatus::READY->value
+        ]);
+
+        info($media);
         /* return response()->json([
             'is_valid'      => $file->isValid(),
             'original_name' => $file->getClientOriginalName(), //INAAMBATANISHA EXTENSION SIO

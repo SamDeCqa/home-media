@@ -41,7 +41,7 @@ class ThumbnailGenerator
     {
         $thumbnail = $this->thumbnailPath();
 
-        FFMpeg::fromDisk('local_server')
+        FFMpeg::fromDisk('server_local')
             ->open($media->path)
             ->getFrameFromSeconds(1)
             ->export()
@@ -55,7 +55,7 @@ class ThumbnailGenerator
     {
         $thumbnail = $this->thumbnailPath();
         $pdf = new Pdf(
-            Storage::disk('local_server')->path($media->path)
+            Storage::disk('server_local')->path($media->path)
         );
 
         $pdf->thumbnailSize($this->height, $this->width)
