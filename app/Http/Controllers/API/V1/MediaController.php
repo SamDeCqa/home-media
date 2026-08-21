@@ -98,7 +98,7 @@ class MediaController extends Controller
     /**
      * Saves the completed, merged file to permanent storage.
     */
-    protected function saveFile(UploadedFile $file, Request $request): JsonResponse
+    protected function saveFile(UploadedFile $file, Request $request): MediaResource
     {
         $file = $request->file('file');
         $extension = $file->getClientOriginalExtension();
@@ -121,18 +121,12 @@ class MediaController extends Controller
             'is_favorite' => $request->is_favorite ?? false,
             'is_private' => $request->is_private ?? true
         ]);
-
-        $preferences = ['description' => $request->description, 'is_private' => $request->is_private, 'is_favorite' => $request->is_favorite];
         
         dispatch(new ProcessMedia($media->id));
         // Delete temporary chunk metadata once saved
         unlink($file->getPathname());
 
-        return response()->json([
-            // 'path' => $path,
-            'name' => $fileName,
-            'mime_type' => $preferences,
-        ]);
+        return new MediaResource($media);
     }
 
     /**
