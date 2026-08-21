@@ -15,7 +15,7 @@
         "laravel/tinker": "^3.0",
         "pbmedia/laravel-ffmpeg": "^8.9",
         "pion/laravel-chunk-upload": "^1.6",
-        "spatie/pdf-to-image": "*"
+        "spatie/pdf-to-image": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

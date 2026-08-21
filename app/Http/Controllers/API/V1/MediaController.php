@@ -106,14 +106,14 @@ class MediaController extends Controller
         $fileName .= '_' . md5(time()) . '.' . $extension; // create unique name
         
         // Store file in app/public/media
-        $path = $file->storeAs('media', $fileName, 'server_local');
+        $path = $file->storeAs('media', $fileName, 'public');
 
         $user = $request->user();
 
          $media =  $user->media()->create([
             'name' => $file->getFilename(),
             'path' => $path,
-            'disk' => 'server_local',
+            'disk' => 'public',
             'content_type'=> $file->getMimeType(),
             'description' => $request->description,
             'byte_size' => $file->getSize(),

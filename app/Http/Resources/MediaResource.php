@@ -19,7 +19,7 @@ class MediaResource extends JsonResource
             'id' => $this->uuid,
             'name' => $this->name,
             'url' => Storage::disk('server_local')->url($this->path),
-            'thumbnail' => Storage::disk('server_local')->url($this->thumbnail_path),
+            'thumbnail' => $this->thumbnail_path ? Storage::disk('server_local')->url($this->thumbnail_path) : null,
             'type' => $this->content_type,
             'info' => $this->description,
             'status' => $this->processing_status,
