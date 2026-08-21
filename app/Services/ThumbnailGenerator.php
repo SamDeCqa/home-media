@@ -3,11 +3,17 @@
 namespace App\Services;
 
 use App\Models\Media;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use Spatie\PdfToImage\Pdf;
 
 class ThumbnailGenerator
 {
+    private $height = config('thumbnail.size.height');
+    private $width = config('thumbnail.size.width');
+    private $quality = config('thumbnail.quality');
+
     /**
      * Create a new class instance.
      */
@@ -40,11 +46,23 @@ class ThumbnailGenerator
             ->export()
             ->toDisk('local')
             ->save($thumbnail);
+
+        return $thumbnail;
     }
 
     private function fromPdf(Media $media)
     {
         $thumbnail = $this->thumbnailPath();
+        $pdf = new Pdf(
+            Storage::disk('local_server')->path($media->path)
+            );
+
+           $pdf->thumbnailSize(400, 400)
+            ->save(
+                Storage::disk('local')->path($thumbnail)
+            );
+
+        return $thumbnail;
     }
 
     private function thumbnailPath()
