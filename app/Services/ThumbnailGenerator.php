@@ -6,7 +6,10 @@ use App\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use Intervention\Image\Laravel\Facades\Image;
 use Spatie\PdfToImage\Pdf;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ThumbnailGenerator
 {
@@ -32,11 +35,23 @@ class ThumbnailGenerator
         };
     }
 
-    private function fromImage(Media $media)
-    {
-        $thumbnail = $this->thumbnailPath();
-    }
+private function fromImage(Media $media)
+{
+    $thumbnail = $this->thumbnailPath();
 
+    $manager = new ImageManager(new Driver());
+
+    $manager->decodePath(
+        Storage::disk('public')->path($media->path)
+    )
+        ->cover($this->width, $this->height)
+        // ->toJpeg(quality: $this->quality)
+        ->save(
+            Storage::disk('public')->path($thumbnail)
+        );
+
+    return $thumbnail;
+}
     private function fromVideo(Media $media)
     {
         $thumbnail = $this->thumbnailPath();
