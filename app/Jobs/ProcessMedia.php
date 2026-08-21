@@ -46,6 +46,7 @@ private $user;*/
 
 
     $this->media->update(['processing_status' => MediaProcessingStatus::READY->value]);
+    info($this->media);
         /* return response()->json([
             'is_valid'      => $file->isValid(),
             'original_name' => $file->getClientOriginalName(), //INAAMBATANISHA EXTENSION SIO
