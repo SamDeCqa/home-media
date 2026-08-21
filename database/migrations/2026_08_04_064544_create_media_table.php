@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('is_private')->default(true);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('byte_size');
+            $table->string('thumbnail_path')->nullable();
             $table->json('metadata')->nullable();
             $table->softDeletes();
             $table->timestamps();
