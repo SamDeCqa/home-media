@@ -10,16 +10,17 @@ use Spatie\PdfToImage\Pdf;
 
 class ThumbnailGenerator
 {
-    private $height = config('thumbnail.size.height');
-    private $width = config('thumbnail.size.width');
-    private $quality = config('thumbnail.quality');
-
+    private int $height;
+    private int $width;
+    private int $quality;
     /**
      * Create a new class instance.
      */
     public function __construct()
     {
-        //
+        $this->height = config('thumbnail.size.height');
+        $this->width = config('thumbnail.size.width');
+        $this->quality = config('thumbnail.quality');
     }
 
     public function generate(Media $media)
@@ -55,9 +56,9 @@ class ThumbnailGenerator
         $thumbnail = $this->thumbnailPath();
         $pdf = new Pdf(
             Storage::disk('local_server')->path($media->path)
-            );
+        );
 
-           $pdf->thumbnailSize(400, 400)
+        $pdf->thumbnailSize($this->height, $this->width)
             ->save(
                 Storage::disk('local')->path($thumbnail)
             );
